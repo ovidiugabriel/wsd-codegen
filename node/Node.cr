@@ -6,7 +6,7 @@ class Node
     TYPE_CREATE = "create"
     TYPE_CALL   = "call"
 
-    def initialize(type, from : String = nil, to : String = nil, message : String = nil)
+    def initialize(type : String, from : String = nil, to : String = nil, message : String = nil)
         if type
             type_names = {
                 "-->-"  =>  TYPE_FINISH,
