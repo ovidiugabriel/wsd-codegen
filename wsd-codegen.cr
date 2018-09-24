@@ -1,42 +1,61 @@
 
-# Finish occurrence {finish}
+# a tab is 4 spaces
+TAB = '    '
 
-if matches = /^\s*(.*)\s*(-->-)\s*(.*)\s*:\s*(.*)\s*$/.match(line)
-    n = [ matches[2], matches[1], matches[3], matches[4] ]
+participants = Array(Node).new()
+sections = Hash { 
+    "header" => Array(Node).new(), 
+    "code"   => Array(Node).new() 
+}
 
-# Return message {return}
+def parse_line(line : String)
+    # Finish occurrence {finish}
 
-elsif matches = /^\s*(.*)\s*(-->)\s*(.*)\s*:\s*(.*)\s*$/.match(line)
-    n = [ matches[2], matches[1], matches[3], matches[4] ]
-    
-# Start occurrence {start}
-elsif matches = /^\s*(.*)\s*(->\+)\s*(.*)\s*:\s*(.*)\s*$/.match(line)
-    n = [ matches[2], matches[1], matches[3], matches[4] ]
+    if match = /^\s*(.*)\s*(-->-)\s*(.*)\s*:\s*(.*)\s*$/.match(line)
+        node = new Node( match[2], match[1], match[3], match[4] );
 
-# Object creation message {create}    
-elsif matches = /^\s*(.*)\s*(->\*)\s*(.*)\s*:\s*(.*)\s*$/.match(line)
-    n = [ matches[2], matches[1], matches[3], matches[4] ]
+    # Return message {return}
 
-# (Synchronous) message {call}
-elsif matches = /^\s*(.*)\s*(->)\s*(.*)\s*:\s*(.*)\s*$/.match(line)
-    n = [ matches[2], matches[1], matches[3], matches[4] ]
+    elsif match = /^\s*(.*)\s*(-->)\s*(.*)\s*:\s*(.*)\s*$/.match(line)
+        node = new Node( match[2], match[1], match[3], match[4] )
 
-elsif matches = /^(destroy)\s+(.*)$/.match(line)
-    destroy_node = [ matches[2] ]
-    
-elsif matches = /^(alt)\s+(.*)$/.match(line)
-    alt_node = [ matches[1], matches[2] ]
-    
-elsif matches = /^(else)\s+(.*)$/.match(line)
-    alt_node = [ matches[1], matches[2] ]
-    
-elsif matches = /^(end)$/.match(line)
-    end_node = 1
-    
-elsif matches = /^(opt)\s+(.*)$/.match(line)
-    alt_node = [ matches[1], matches[2] ]
+    # Start occurrence {start}
+    elsif match = /^\s*(.*)\s*(->\+)\s*(.*)\s*:\s*(.*)\s*$/.match(line)
+        node = new Node( match[2], match[1], match[3], match[4] )
 
-elsif matches = /^(loop)\s+(.*)$/.match(line)
-    alt_node = [ matches[1], matches[2] ]
-    
+    # Object creation message {create}    
+    elsif match = /^\s*(.*)\s*(->\*)\s*(.*)\s*:\s*(.*)\s*$/.match(line)
+        node = new Node( match[2], match[1], match[3], match[4] )
+
+    # (Synchronous) message {call}
+    elsif match = /^\s*(.*)\s*(->)\s*(.*)\s*:\s*(.*)\s*$/.match(line)
+        node = new Node( match[2], match[1], match[3], match[4] )
+
+    elsif match = /^(destroy)\s+(.*)$/.match(line)
+        node = new DestroyNode( match[2] )
+
+    elsif match = /^(alt)\s+(.*)$/.match(line)
+        node = new AltNode( match[1], match[2] )
+
+    elsif match = /^(else)\s+(.*)$/.match(line)
+        node = new AltNode( match[1], match[2] )
+
+    elsif match = /^(end)$/.match(line)
+        node = new EndNode();
+
+    elsif match = /^(opt)\s+(.*)$/.match(line)
+        node = new AltNode( match[1], match[2] )
+
+    elsif match = /^(loop)\s+(.*)$/.match(line)
+        node = new AltNode( match[1], match[2] )
+
+    elsif match = /^(participant)\s+(.*)$/.match(line)
+        participant = new Node( matches[1], null, null, matches[2] )
+        sections["header"].push(participant)
+        participants[matches[2]] = []
+
+    else
+        # The line is not recognized by the language
+
+    end
 end
