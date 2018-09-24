@@ -9,6 +9,8 @@ sections = Hash {
 }
 
 def parse_line(line : String)
+    node = nil
+
     # Finish occurrence {finish}
 
     if match = /^\s*(.*)\s*(-->-)\s*(.*)\s*:\s*(.*)\s*$/.match(line)
@@ -57,5 +59,9 @@ def parse_line(line : String)
     else
         # The line is not recognized by the language
 
+    end
+
+    if node
+        participants[node.from].push(node)
     end
 end
