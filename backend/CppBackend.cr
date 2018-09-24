@@ -10,17 +10,17 @@ class CppBackend
     def generate_main_method(method : String) : String       
         main_participant, main_func = method.split("::")
         
-        out = "int #{method}() {\n"
+        output = "int #{method}() {\n"
         @@participants[main_participant].each { |node|
-            out += TAB + generate(node)
+            output += TAB + generate(node)
         }
-        out += "}\n\n"
+        output += "}\n\n"
     end
 
     def create_entry_point(method : String) : String
-        out = "int main(int argc, char* argv[]) {\n"
-        out += TAB + "return #{method}();\n"
-        out += "}\n\n"
+        output = "int main(int argc, char* argv[]) {\n"
+        output += TAB + "return #{method}();\n"
+        output += "}\n\n"
     end
 
     def generate(node : Node) : String
