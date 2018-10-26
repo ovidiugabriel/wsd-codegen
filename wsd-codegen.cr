@@ -1,6 +1,17 @@
 
+require "option_parser"
+
 # a tab is 4 spaces
 TAB = '    '
+
+# main code
+
+main_method = nil
+OptionParser.parse! { |parser|
+    parser.on("--main METHOD", "Specify the main method") { |method|
+        main_method = method
+    }
+}
 
 participants = Array(Node).new()
 sections = Hash { 
@@ -74,3 +85,8 @@ sections["header"].each { |hdr_node|
     puts backend.generate(hdr_node)
 }
 puts "" # newline
+
+if main_method
+    puts backend.generate_main_method(main_method)
+    puts backend.generate_entry_point(main_method)
+end
