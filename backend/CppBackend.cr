@@ -7,11 +7,20 @@ class CppBackend
         @@instance ||= new
     end    
     
+    #
+    # Returns a line that creates a named instance of the given class:
+    #   class_name* object_name = new class_name()
+    #
     def generate_create_instance(class_name : String, object_name : String = nil) : String
         object_name = class_name.downcase() if !object_name
         return "#{class_name}* #{object_name} = new #{class_name}()"
     end
     
+    #
+    # Generates a named method with the following signature:
+    #   int method()
+    # and creates body code for interactions with the main participant
+    #
     def generate_main_method(method : String) : String       
         main_participant, main_func = method.split("::")
         
@@ -22,7 +31,11 @@ class CppBackend
         output += "}\n\n"
     end
 
-    def create_entry_point(method : String) : String
+    #
+    # Generates the entry point of the program, 
+    # wrapping a call to the main method in the default entry point.
+    #
+    def generate_entry_point(method : String) : String
         output = "int main(int argc, char* argv[]) {\n"
         output += TAB + "return #{method}();\n"
         output += "}\n\n"
