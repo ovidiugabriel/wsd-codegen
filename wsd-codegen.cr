@@ -65,3 +65,12 @@ def parse_line(line : String)
         participants[node.from].push(node)
     end
 end
+
+backend = CppBackend.instance()
+
+# Generate header code
+
+sections["header"].each { |hdr_node|
+    puts backend.generate(hdr_node)
+}
+puts "" # newline
