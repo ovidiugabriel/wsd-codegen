@@ -9,10 +9,10 @@ abstract NodeType(String) {
 
 class Node {
     
-    private var type    : String = null;
-    private var from    : String;
-    private var to      : String;
-    private var message : String;
+    public var type    : String = null;
+    public var from    : String;
+    public var to      : String;
+    public var message : String;
 
     public function new(?arrowType : String = null, ?from : String = null, ?to : String = null, 
                         ?message : String = null) 
