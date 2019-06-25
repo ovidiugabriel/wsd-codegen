@@ -25,9 +25,11 @@ class Node {
                 "->*"   :  TYPE_CREATE,
                 "->"    :  TYPE_CALL
             };            
-            this.type = Reflect.hasField(typeNames, arrowType) 
-		    ? Reflect.field(typeNames, arrowType) 
-		    : arrowType;
+            this.type = if (Reflect.hasField(typeNames, arrowType)) {
+                Reflect.field(typeNames, arrowType);    
+            } else {
+                arrowType;
+            }
         }
 
         this.from = from;
