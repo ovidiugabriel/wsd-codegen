@@ -29,7 +29,7 @@ class Node {
                 Reflect.field(typeNames, arrowType);    
             } else {
                 arrowType;
-            }
+            };
         }
 
         this.from = from;
