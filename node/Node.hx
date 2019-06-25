@@ -17,18 +17,17 @@ class Node {
     public function new(?arrowType : String = null, ?from : String = null, ?to : String = null, 
                         ?message : String = null) 
     {
-		if (arrowType != null) {
+        if (arrowType != null) {
             var typeNames = {
                 "-->-"  :  TYPE_FINISH,
                 "-->"   :  TYPE_RETURN,
                 "->+"   :  TYPE_START,
                 "->*"   :  TYPE_CREATE,
                 "->"    :  TYPE_CALL
-            };
-            
-            if (Reflect.hasField(typeNames, arrowType)) {
-            	this.type = Reflect.field(typeNames, arrowType);    
-            }
+            };            
+            this.type = Reflect.hasField(typeNames, arrowType) 
+		    ? Reflect.field(typeNames, arrowType) 
+		    : arrowType;
         }
 
         this.from = from;
